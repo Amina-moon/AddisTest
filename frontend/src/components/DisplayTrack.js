@@ -1,10 +1,11 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faImage, faPlay, faPause, faForward, faBackward, faForwardStep, faBackwardStep } from '@fortawesome/free-solid-svg-icons';
-import { WholeCardContainer, CardContainer, CardWrapper, CardTitle, CardContent, SpecialCardContent, CardImage, RangeInput, ProgressBarContainer, ControlsWrapper, Button } from './style';
+import React, { useState, useCallback, useEffect, useRef } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {faImage,faPlay,faPause,faForward,faBackward,faEllipsisVertical,} from "@fortawesome/free-solid-svg-icons";
+import {Time,DropdownButton,DropdownContent,DropdownLink,WholeCardContainer,CardContainer,CardWrapper,
+  CardTitle,CardContent,SpecialCardContent,CardImage,RangeInput,ProgressBarContainer,ControlsWrapper,Button,} from "./style";
 
-
-const DisplayTrack = ({ currentTrack, audioRef, setDuration, progressBarRef, handlNext, timeProgress, duration, setTimeProgress, tracks, trackIndex, setTrackIndex, setCurrentTrack }) => {
+const DisplayTrack = ({currentTrack,audioRef,setDuration,progressBarRef,handlNext,
+                       timeProgress,duration,setTimeProgress,tracks,}) => {
   const onLoadedMetadata = () => {
     const seconds = audioRef.current.duration;
     setDuration(seconds);
@@ -22,75 +23,79 @@ const DisplayTrack = ({ currentTrack, audioRef, setDuration, progressBarRef, han
       const formatSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
       return `${formatMinutes}:${formatSeconds}`;
     }
-    return '00:00';
+    return "0:00";
   };
   const togglePlayPause = () => {
-    setIsPlaying((prev) => !prev)
-  }
+    setIsPlaying((prev) => !prev);
+  };
   const skipForward = () => {
     audioRef.current.currentTime += 15;
-
-  }
+  };
   const skipBackward = () => {
     audioRef.current.currentTime -= 15;
-
-  }
-  const handleNext = () => {
-    if (trackIndex >= tracks.length - 1) {
-      setTrackIndex(0);
-      setCurrentTrack(tracks[0]);
-    } else {
-      setTrackIndex((prev) => prev + 1);
-      setCurrentTrack(tracks[trackIndex + 1]);
-    }
   };
-  const handlePrevious = () => {
-    if (trackIndex === 0) {
-      let lastTrackIndex = tracks.length - 1;
-      setTrackIndex(lastTrackIndex);
-      setCurrentTrack(tracks[lastTrackIndex])
-    }
-    else {
-      setTrackIndex((prev) => prev - 1);
-      setCurrentTrack(tracks[trackIndex - 1]);
-    }
 
-  }
-
-
-  const [isPlaying, setIsPlaying] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const playAnimationRef = useRef();
 
   const repeat = useCallback(() => {
-    const currentTime = audioRef.current.currentTime;
-    setTimeProgress(currentTime);
-    progressBarRef.current.value = currentTime;
-    progressBarRef.current.style.setProperty(
-      '--range-progress',
-      `${(progressBarRef.current.value / duration) * 100}%`
-    );
-    playAnimationRef.current = requestAnimationFrame(repeat)
-  }, [audioRef, duration, progressBarRef, setTimeProgress])
+    if (audioRef.current && audioRef.current.currentTime) {
+      const currentTime = audioRef.current.currentTime;
+      setTimeProgress(currentTime);
+      progressBarRef.current.value = currentTime;
+      progressBarRef.current.style.setProperty(
+        "--range-progress",
+        `${(progressBarRef.current.value / duration) * 100}%`
+      );
+      playAnimationRef.current = requestAnimationFrame(repeat);
+    }
+  }, [audioRef, duration, progressBarRef, setTimeProgress]);
 
   useEffect(() => {
     if (isPlaying) {
       audioRef.current.play();
-    }
-    else {
+    } else {
       audioRef.current.pause();
     }
-    playAnimationRef.current = requestAnimationFrame(repeat)
-  }, [isPlaying, audioRef, repeat])
+    playAnimationRef.current = requestAnimationFrame(repeat);
+  }, [isPlaying, audioRef, repeat]);
 
+  const [isDropdownOpen, setDropdownOpen] = useState(0);
+
+  const handleDropdownToggle = () => {
+    setDropdownOpen(!isDropdownOpen);
+  };
+
+  const [isShowing, setIsShowing] = useState(0)
+
+  const toggleModal=()=>{
+    setIsShowing(!isShowing)
+  }
+
+  
 
   return (
     <div>
       <WholeCardContainer>
         {tracks.map((currentTrack, index) => (
           <CardWrapper key={index}>
+            <audio
+              src={currentTrack.song}
+              ref={audioRef}
+              onLoadedMetadata={onLoadedMetadata}
+              onEnded={handlNext}
+            />
             <CardContainer>
-              <audio src={currentTrack.src} ref={audioRef} onLoadedMetadata={onLoadedMetadata} onEnded={handlNext} />
+              <DropdownButton onClick={handleDropdownToggle}>
+                <FontAwesomeIcon icon={faEllipsisVertical} />
+              </DropdownButton>
+              <DropdownContent show={isDropdownOpen}>
+                <DropdownLink  >Delete Song</DropdownLink>
+                <DropdownLink onClick={toggleModal}>Update Song</DropdownLink>
+                <button onClick={toggleModal}>Close</button>
+              </DropdownContent>
+
               {currentTrack.thumbnail ? (
                 <CardImage src={currentTrack.thumbnail} alt="audio-avatar" />
               ) : (
@@ -102,44 +107,44 @@ const DisplayTrack = ({ currentTrack, audioRef, setDuration, progressBarRef, han
               )}
 
               <CardTitle>
-                <p>{currentTrack.title}</p>
+                <p>{currentTrack.songName}</p>
               </CardTitle>
               <CardContent>
                 <p>{currentTrack.author}</p>
               </CardContent>
               <SpecialCardContent>
-                <p>{currentTrack.realseDate}</p>
+                <p>{currentTrack.releaseDate}</p>
               </SpecialCardContent>
 
               <ProgressBarContainer>
                 <div className="progress">
-                  <span>{formatTime(timeProgress)}</span>
+                  <span>
+                    <Time>{formatTime(timeProgress)}</Time>
+                  </span>
                   <RangeInput
                     type="range"
                     ref={progressBarRef}
                     defaultValue="0"
                     onChange={handleProgressChange}
-
                   />
-                  <span className='time'>{formatTime(duration)}</span>
+                  <span>
+                    <Time>{formatTime(duration)}</Time>
+                  </span>
                 </div>
-
               </ProgressBarContainer>
               <ControlsWrapper>
-                <Button onClick={handlePrevious}>
-                  <FontAwesomeIcon icon={faBackwardStep} />
-                </Button>
                 <Button onClick={skipBackward}>
                   <FontAwesomeIcon icon={faBackward} />
                 </Button>
                 <Button onClick={togglePlayPause}>
-                  {isPlaying ? <FontAwesomeIcon icon={faPause} /> : <FontAwesomeIcon icon={faPlay} />}
+                  {isPlaying ? (
+                    <FontAwesomeIcon icon={faPause} />
+                  ) : (
+                    <FontAwesomeIcon icon={faPlay} />
+                  )}
                 </Button>
                 <Button onClick={skipForward}>
                   <FontAwesomeIcon icon={faForward} />
-                </Button>
-                <Button onClick={handleNext}>
-                  <FontAwesomeIcon icon={faForwardStep} />
                 </Button>
               </ControlsWrapper>
             </CardContainer>

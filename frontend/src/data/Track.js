@@ -15,53 +15,53 @@ import Sevenn from './Sevenn.jpg'
 
 export const tracks =[
     {
-        title:'Feraw',
-        src:one,
-        author:'alfatihhun',
+        songName:'Feraw',
+        song:one,
+        author:'alfatihhun1',
         thumbnail:onee,
-        realseDate:'13-03-2015'
+        releaseDate:'13-03-2015'
     },
     {
-        title:'Mewlayeseli',
-        src:Two,
-        author:'alfatihhun',
+        songName:'Mewlayeseli',
+        song:Two,
+        author:'alfatihhun2',
         thumbnail:Twoo,
-        realseDate:'13-03-2015'
+        releaseDate:'13-04-2015'
     },
     {
-        title:'Selati',
-        src:Three,
-        author:'alfatihhun',
+        songName:'Selati',
+        song:Three,
+        author:'alfatihhun3',
         thumbnail:Threee,
-        realseDate:'13-03-2015'
+        releaseDate:'13-05-2015'
     },
     {
-        title:'Nehnuqewmun',
-        src:Four,
-        author:'alfatihhun',
+        songName:'Nehnuqewmun',
+        song:Four,
+        author:'alfatihhun4',
         thumbnail:Fourr,
-        realseDate:'13-03-2015'
+        releaseDate:'13-06-2015'
     },
     {
-        title:'yaresulelah',
-        src:Five,
-        author:'alfatihhun',
+        songName:'yaresulelah',
+        song:Five,
+        author:'alfatihhun5',
         thumbnail:Fivee,
-        realseDate:'13-03-2015'
+        releaseDate:'13-07-2015'
     },
     {
-        title:'Latehzn',
-        src:Six,
-        author:'alfatihhun',
+        songName:'Latehzn',
+        song:Six,
+        author:'alfatihhun6',
         thumbnail:Sixx,
-        realseDate:'13-03-2015'
+        releaseDate:'13-08-2015'
     },
     {
-        title:'Sebitni',
-        src:Seven,
-        author:'alfatihhun',
+        songName:'Sebitni',
+        song:Seven,
+        author:'alfatihhun7',
         thumbnail:Sevenn,
-        realseDate:'13-03-2015'
+        releaseDate:'13-09-2015'
     }
 
 ]

@@ -1,11 +1,12 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
+import Create from '../components/Create'
 
 const CreateMusic = () => {
   return (
     <div>
       <Navbar/>
-      <p>it is create Music Page</p>
+      <Create/>
     </div>
   )
 }

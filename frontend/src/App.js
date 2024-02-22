@@ -1,14 +1,21 @@
 import React from 'react';
-import Home from './pages/Home';
+import { BrowserRouter as Router, Routes,Route,  } from 'react-router-dom';
+import Home from './pages/Home.jsx';
+import CreateMusic from './pages/CreateMusic';
+
 
 function App() {
   return (
-    <div className="App">
-    <Home/>
+    <>
+   
     
-    
-      
-    </div>
+     <Router>
+      <Routes>
+        <Route path="/" exact element={<Home/>} />
+        <Route exact path="/createmusic" element={<CreateMusic/>} />
+      </Routes>
+    </Router>
+    </>
   );
 }
 
